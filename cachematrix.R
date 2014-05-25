@@ -1,15 +1,36 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
-
-makeCacheMatrix <- function(x = matrix()) {
-
+##  This function will accept a matrix to be processes by second function #
+###  Below comment lines are to test the code
+# create matrix option 1            :  a <- makeCacheMatrix(matrix(1:4, 2,2))        #
+# create matrix option 2            :  a <- makeCacheMatrix(matrix(c(7, 12, 16 , 2, 45, 3, 1, 5, 7), nrow=3, ncol=3)) #
+# Assign to a variable to test later : b <- a$get()                                                                    #
+# Get Inverse of matrix and assign  :  e<- cacheSolve(a)                                                               #
+# Test your result (it should be Identity matrix) :   e%*%b                                                                           #
+#
+makeCacheMatrix <- function(x = numeric()) {
+      m <- NULL
+      set <- function(y) {
+            x <<- y
+            m <<- NULL
+      }
+      get <- function() x
+      setSolve <- function(Solve) m <<- Solve
+      getSolve <- function() m
+      list(set = set, get = get,
+           setSolve = setSolve,
+           getSolve = getSolve)
 }
 
-
-## Write a short comment describing this function
+##  This function will calculate Inverse of a matrix 
+# If same Matrix was already calculated, it will get the cached matrix value instead of calculating again
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+      m <- x$getSolve()
+      if(!is.null(m)) {
+            message("getting cached matrix")
+            return(m)
+      }
+      data <- x$get()
+      m <- solve(data, ...)
+      x$setSolve(m)
+      m
 }
